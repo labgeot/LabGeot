@@ -51,7 +51,6 @@ npx serve .
 Para publicarlo en la web, bastará con subir la carpeta `web/client/` a cualquier servicio de hosting estático (GitHub Pages, Netlify, Vercel, etc.).
 
 ## 🛠️ Tecnologías
-
 - [Leaflet.js](https://leafletjs.com/) v1.9.4 — Librería de mapas interactivos
 - [Proj4js](https://proj4js.org/) v2.9.0 — Transformación de proyecciones cartográficas
 - [Font Awesome](https://fontawesome.com/) 6.4.0 — Iconografía
