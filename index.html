@@ -977,7 +977,7 @@
   <header>
     <div class="logo-container">
       <a href="https://www.apellbahiablanca.org.ar/" target="_blank" title="APELL Bahía Blanca" style="text-decoration: none; display: flex; align-items: center;"><img src="logo.png" alt="APELL Bahía Blanca" style="height: 50px; object-fit: contain;"></a>
-      <a href="https://bahia.website/" target="_blank" title="Municipio Bahía Blanca" style="text-decoration: none; display: flex; align-items: center;"><img src="muni_bahia.webp" alt="Municipio Bahía Blanca" style="height: 25px; object-fit: contain;"></a>
+      <a href="https://www.bahia.gob.ar/" target="_blank" title="Municipio Bahía Blanca" style="text-decoration: none; display: flex; align-items: center;"><img src="muni_bahia.webp" alt="Municipio Bahía Blanca" style="height: 25px; object-fit: contain;"></a>
       <a href="https://www.instagram.com/labgeot/" target="_blank" title="LabGeot Instagram" style="text-decoration: none; display: flex; align-items: center;"><img src="labgeot.png" alt="LabGeot" style="height: 25px; object-fit: contain;"></a>
     </div>
     <div class="header-buttons">
@@ -1162,6 +1162,14 @@
           <span>Origen personalizado</span>
         </div>
         <div class="collapsible-widget-body" id="origin-widget-body">
+          <div style="margin-bottom: 10px; position: relative;">
+            <div class="global-search-container" style="position: relative; width: 100%; margin: 0; box-shadow: none; border: 1px solid #ccc; border-radius: 6px;">
+              <i class="fas fa-search" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #777; z-index: 2;"></i>
+              <input type="text" id="origin-search-input" placeholder="Buscar dirección de origen..." oninput="handleOriginSearch(event)" style="width: 100%; box-sizing: border-box; padding: 8px 10px 8px 30px; border: none; border-radius: 6px; outline: none; font-size: 0.85rem; background: #fff;">
+            </div>
+            <div id="origin-search-results" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; max-height: 200px; overflow-y: auto; flex-direction: column;"></div>
+          </div>
+          <div style="text-align: center; margin-bottom: 10px; font-size: 0.8rem; color: #666; font-weight: bold;">O bien...</div>
           <button id="custom-origin-toggle-btn" onclick="toggleCustomOriginPickMode()" style="width: 100%; padding: 9px 12px; background: #e8f5e9; color: var(--primary-color); border: 1.5px solid #81c784; border-radius: 6px; font-weight: bold; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s;">
             <i class="fas fa-crosshairs"></i> <span id="custom-origin-btn-text">Activar origen en mapa</span>
           </button>
@@ -2641,6 +2649,20 @@
             }
             listItems.forEach(el => el.classList.remove('active'));
             setLayerVisibleVar(capa, false);
+
+            if (capa === 'delegaciones' && isAreaInfluenciaActive && ingWhiteDelegationLayer) {
+                if (!map.hasLayer(ingWhiteDelegationLayer)) {
+                    map.addLayer(ingWhiteDelegationLayer);
+                }
+                if (ingWhiteDelegationLayer.setStyle) {
+                    ingWhiteDelegationLayer.setStyle({
+                        color: '#0288d1',
+                        weight: 3,
+                        fillColor: '#00acc1',
+                        fillOpacity: 0.5
+                    });
+                }
+            }
         } else {
             // Encender todos los elementos de esta capa
             if (btn) btn.classList.add('active');
@@ -2654,9 +2676,11 @@
                     if (!map.hasLayer(l)) map.addLayer(l);
                 });
                 try {
-                    const bounds = layerGroup.getBounds();
-                    if (bounds && bounds.isValid()) {
-                        map.fitBounds(bounds, { padding: [50, 50], maxZoom: 16 });
+                    if (!areaInfluenciaLayerGroup) {
+                        initAreaInfluencia();
+                    }
+                    if (areaInfluenciaLayerGroup && areaInfluenciaLayerGroup.getBounds && areaInfluenciaLayerGroup.getBounds().isValid()) {
+                        map.setView(areaInfluenciaLayerGroup.getBounds().getCenter(), 13);
                     }
                 } catch(e) {}
             }
@@ -2813,6 +2837,48 @@
             });
         }
 
+        renderGlobalSearchResults(matches, resultsContainer, e.target);
+
+        // Búsqueda de direcciones reales mediante Nominatim
+        clearTimeout(window.geocodeSearchTimeout);
+        window.geocodeSearchTimeout = setTimeout(async () => {
+            try {
+                // Agregar indicador de carga si no hay matches locales
+                if (matches.length === 0) {
+                    resultsContainer.innerHTML = '<div style="padding:15px;text-align:center;color:#666;font-size:0.9rem;"><i class="fas fa-spinner fa-spin"></i> Buscando dirección...</div>';
+                    resultsContainer.style.display = 'flex';
+                }
+
+                const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&viewbox=-62.5,-38.6,-62.1,-38.9&bounded=1&limit=5`;
+                const res = await fetch(url);
+                const data = await res.json();
+                
+                if (data && data.length > 0) {
+                    const addressMatches = data.map(d => ({
+                        isAddress: true,
+                        title: d.display_name.split(',').slice(0, 2).join(','),
+                        type: 'Dirección encontrada (OSM)',
+                        lat: parseFloat(d.lat),
+                        lon: parseFloat(d.lon)
+                    }));
+                    
+                    renderGlobalSearchResults([...matches, ...addressMatches], resultsContainer, e.target);
+                } else if (matches.length === 0) {
+                    resultsContainer.innerHTML = '<div style="padding:15px;text-align:center;color:#999;font-size:0.9rem;">No se encontraron resultados</div>';
+                    resultsContainer.style.display = 'flex';
+                }
+            } catch (err) {
+                console.error("Error en geocoding", err);
+                if (matches.length === 0) {
+                    resultsContainer.innerHTML = '<div style="padding:15px;text-align:center;color:#999;font-size:0.9rem;">No se encontraron resultados</div>';
+                }
+            }
+        }, 600);
+    }
+
+    let globalSearchMarker = null;
+
+    function renderGlobalSearchResults(matches, resultsContainer, inputElement) {
         if (matches.length > 0) {
             resultsContainer.innerHTML = '';
             matches.slice(0, 15).forEach(m => {
@@ -2821,8 +2887,19 @@
                 item.innerHTML = `<span class="global-search-title">${m.title}</span><span class="global-search-type">${m.type}</span>`;
                 item.onclick = () => {
                     resultsContainer.style.display = 'none';
-                    e.target.value = '';
+                    inputElement.value = '';
                     
+                    if (m.isAddress) {
+                        map.setView([m.lat, m.lon], 17);
+                        if (globalSearchMarker) {
+                            map.removeLayer(globalSearchMarker);
+                        }
+                        globalSearchMarker = L.marker([m.lat, m.lon]).addTo(map)
+                            .bindPopup(`<div style="font-size:0.95rem; font-weight:bold; color:var(--primary-color);"><i class="fas fa-map-marker-alt"></i> Dirección Buscada</div><div style="font-size:0.85rem; margin-top:4px;">${m.title}</div>`)
+                            .openPopup();
+                        return;
+                    }
+
                     if (m.layer === 'barrios' && !isBarriosVisible) toggleLayer('barrios');
                     if (m.layer === 'centros_salud' && !isCentrosSaludVisible) toggleLayer('centros_salud');
                     if (m.layer === 'comedores' && !isComedoresVisible) toggleLayer('comedores');
@@ -2857,15 +2934,64 @@
             });
             resultsContainer.style.display = 'flex';
         } else {
-            resultsContainer.innerHTML = '<div style="padding:15px;text-align:center;color:#999;font-size:0.9rem;">No se encontraron resultados</div>';
-            resultsContainer.style.display = 'flex';
+            // Se maneja durante el debounced call para evitar flickeos
         }
+    }
+
+    let originSearchTimeout = null;
+    function handleOriginSearch(e) {
+        const query = e.target.value.toLowerCase().trim();
+        const resultsContainer = document.getElementById('origin-search-results');
+        
+        if (query.length < 2) {
+            resultsContainer.style.display = 'none';
+            return;
+        }
+
+        clearTimeout(originSearchTimeout);
+        originSearchTimeout = setTimeout(async () => {
+            try {
+                resultsContainer.innerHTML = '<div style="padding:10px;text-align:center;color:#666;font-size:0.8rem;"><i class="fas fa-spinner fa-spin"></i> Buscando...</div>';
+                resultsContainer.style.display = 'flex';
+
+                const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&viewbox=-62.5,-38.6,-62.1,-38.9&bounded=1&limit=5`;
+                const res = await fetch(url);
+                const data = await res.json();
+                
+                if (data && data.length > 0) {
+                    resultsContainer.innerHTML = '';
+                    data.forEach(d => {
+                        const title = d.display_name.split(',').slice(0, 2).join(',');
+                        const item = document.createElement('div');
+                        item.className = 'global-search-item';
+                        item.innerHTML = `<span class="global-search-title">${title}</span><span class="global-search-type">Dirección</span>`;
+                        item.onclick = () => {
+                            resultsContainer.style.display = 'none';
+                            e.target.value = title;
+                            const latlng = L.latLng(parseFloat(d.lat), parseFloat(d.lon));
+                            setCustomOrigin(latlng);
+                            map.setView(latlng, 16);
+                        };
+                        resultsContainer.appendChild(item);
+                    });
+                } else {
+                    resultsContainer.innerHTML = '<div style="padding:10px;text-align:center;color:#999;font-size:0.8rem;">No se encontraron resultados</div>';
+                }
+            } catch (err) {
+                console.error("Error buscando origen", err);
+                resultsContainer.innerHTML = '<div style="padding:10px;text-align:center;color:#999;font-size:0.8rem;">Error de búsqueda</div>';
+            }
+        }, 600);
     }
 
     document.addEventListener('click', (e) => {
         if(!e.target.closest('.map-overlay-search') && !e.target.closest('.global-search-results')) {
             const res = document.getElementById('global-search-results');
             if(res) res.style.display = 'none';
+        }
+        if(!e.target.closest('#origin-search-input') && !e.target.closest('#origin-search-results')) {
+            const originRes = document.getElementById('origin-search-results');
+            if(originRes) originRes.style.display = 'none';
         }
         if(!e.target.closest('.basemap-selector') && !e.target.closest('.fa-cube')) {
             const basemapSelector = document.getElementById('basemap-selector');
