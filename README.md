@@ -2,7 +2,6 @@
 
 [![Proceso APELL](https://img.shields.io/badge/APELL-Bahía%20Blanca-2e7d32)](https://web.client/index.html)
 
-
 **MapAPELL** es un visor cartográfico interactivo desarrollado para el **Proceso APELL Bahía Blanca** (Awareness and Preparedness for Emergencies at Local Level). Permite consultar, visualizar y descargar capas geoespaciales relacionadas con la gestión del riesgo y la respuesta ante emergencias en el área del Polo Petroquímico de Bahía Blanca.
 
 ## 🗺️ Funcionalidades
