@@ -26,7 +26,7 @@ const mangasData = {
       "properties": {
         "id": 2,
         "tip": "Manga de viento",
-        "dir": null,
+        "dir": "Sebastián Elcano esq. Maestro Piccioli",
         "ins": "Tanque de agua",
         "num": null,
         "res": null,
