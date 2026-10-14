@@ -6,6 +6,52 @@ const empresasData = {
       "type": "Feature",
       "properties": {
         "id": 1,
+        "Empresaa": "Air Liquide",
+        "Contacto": "0810-222-5272  //  0810 122 1022 // servicioalcliente@airliquide.com",
+        "Rubro": "Gases"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                -62.279740167963105,
+                -38.77361112644771
+              ],
+              [
+                -62.28096488504224,
+                -38.774673166389796
+              ],
+              [
+                -62.280329603990495,
+                -38.775081639079936
+              ],
+              [
+                -62.27975326654148,
+                -38.77459657749997
+              ],
+              [
+                -62.279550238576505,
+                -38.77470380192271
+              ],
+              [
+                -62.278980450416675,
+                -38.77419320798975
+              ],
+              [
+                -62.279740167963105,
+                -38.77361112644771
+              ]
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2,
         "Empresaa": "Pan American Energy SL Sucursal Argentina",
         "Contacto": "https://www.axionenergy.com/contacto/",
         "Rubro": "Planta de Almacenamiento y despacho de combustibles"
@@ -83,7 +129,7 @@ const empresasData = {
     {
       "type": "Feature",
       "properties": {
-        "id": 2,
+        "id": 3,
         "Empresaa": "YPF",
         "Contacto": "https://www.ypf.com/",
         "Rubro": "Produccion de energía, hidrocarburos y el petróleo"
@@ -149,7 +195,7 @@ const empresasData = {
     {
       "type": "Feature",
       "properties": {
-        "id": 3,
+        "id": 4,
         "Empresaa": "PUMA ENERGY",
         "Contacto": "https://www.pumaenergyarg.com.ar/home",
         "Rubro": "Produccion de energía, hidrocarburos y el petróleo"
@@ -195,7 +241,7 @@ const empresasData = {
     {
       "type": "Feature",
       "properties": {
-        "id": 4,
+        "id": 5,
         "Empresaa": "VITERRA",
         "Contacto": "https://www.viterra.com/",
         "Rubro": "Elaboración de Aceites crudos de soja y girasol y almacenaje"
@@ -237,7 +283,7 @@ const empresasData = {
     {
       "type": "Feature",
       "properties": {
-        "id": 5,
+        "id": 6,
         "Empresaa": "SHELL",
         "Contacto": "https://www.shell.com.ar/",
         "Rubro": "Produccion de energía, hidrocarburos y el petróleo"
@@ -292,6 +338,60 @@ const empresasData = {
       "type": "Feature",
       "properties": {
         "id": 7,
+        "Empresaa": "PBB POLISUR (DOW)  LLDPE",
+        "Contacto": "https://ar.dow.com/es-ar.html",
+        "Rubro": "Fabricación o Fraccionamiento de productos de la Industria de abono nitrogenado"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                -62.303242292233115,
+                -38.78006481753887
+              ],
+              [
+                -62.30338310195077,
+                -38.78030222462627
+              ],
+              [
+                -62.30311130644923,
+                -38.78052941991606
+              ],
+              [
+                -62.30296722208699,
+                -38.78080511659895
+              ],
+              [
+                -62.30266268013951,
+                -38.78109102314428
+              ],
+              [
+                -62.302096166624295,
+                -38.78085617142325
+              ],
+              [
+                -62.30210271591349,
+                -38.780465601087535
+              ],
+              [
+                -62.30255134222322,
+                -38.77988357073581
+              ],
+              [
+                -62.303242292233115,
+                -38.78006481753887
+              ]
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 8,
         "Empresaa": "ZONA FRANCA BAHIA BLANCA-CORONEL SUAREZ",
         "Contacto": "https://zfbbcr.gob.ar/",
         "Rubro": "Logistica, almacenaje industrail, agroalimentacion, energia eolica e hidrocarburo"
@@ -357,7 +457,7 @@ const empresasData = {
     {
       "type": "Feature",
       "properties": {
-        "id": 8,
+        "id": 9,
         "Empresaa": "LOUIS DREYFUS COMPANY",
         "Contacto": "https://www.ldc.com/ar/es/ldc-en-argentina/",
         "Rubro": "Almacenamiento, clasificacion y acondicionamiento de granos"
@@ -431,7 +531,7 @@ const empresasData = {
     {
       "type": "Feature",
       "properties": {
-        "id": 9,
+        "id": 10,
         "Empresaa": "MEGA",
         "Contacto": "https://www.ciamega.com.ar/",
         "Rubro": "Fraccionamiento y almacenamiento de sustancias quimicas provenientes de petroleó"
@@ -477,7 +577,7 @@ const empresasData = {
     {
       "type": "Feature",
       "properties": {
-        "id": 10,
+        "id": 11,
         "Empresaa": "PROFERTIL",
         "Contacto": "https://www.profertil.com.ar/",
         "Rubro": "Fabricación o fraccionamiento de productos de la industrai de abono nitrogenados"
@@ -539,7 +639,7 @@ const empresasData = {
     {
       "type": "Feature",
       "properties": {
-        "id": 11,
+        "id": 12,
         "Empresaa": "PBB POLISUR (DOW)",
         "Contacto": "https://ar.dow.com/es-ar.html",
         "Rubro": "Fabricación o Fraccionamiento de productos de la Industria de abono nitrogenado"
@@ -577,7 +677,7 @@ const empresasData = {
     {
       "type": "Feature",
       "properties": {
-        "id": 12,
+        "id": 13,
         "Empresaa": "UNIPAR INDUPA",
         "Contacto": "https://unipar.com/es/contactenos",
         "Rubro": "Fábrica de sustancias Químicas Industriales"
@@ -675,7 +775,7 @@ const empresasData = {
     {
       "type": "Feature",
       "properties": {
-        "id": 13,
+        "id": 14,
         "Empresaa": "PATAGONIA NORTE S.A",
         "Contacto": "https://www.patagonia-norte.com.ar/",
         "Rubro": "servicio portuario y la logística de cargas multipropósito"
@@ -757,7 +857,7 @@ const empresasData = {
     {
       "type": "Feature",
       "properties": {
-        "id": 14,
+        "id": 15,
         "Empresaa": "CARGILL S.A",
         "Contacto": "https://www.cargill.com/worldwide/argentina-es",
         "Rubro": "Elevadores"
@@ -815,7 +915,7 @@ const empresasData = {
     {
       "type": "Feature",
       "properties": {
-        "id": 14,
+        "id": 16,
         "Empresaa": "CARGILL S.A",
         "Contacto": "https://www.cargill.com/worldwide/argentina-es",
         "Rubro": "Elevadores"
@@ -901,7 +1001,7 @@ const empresasData = {
     {
       "type": "Feature",
       "properties": {
-        "id": 16,
+        "id": 17,
         "Empresaa": "CONSORCIO DE GESTIÓN DEL PUERTO DE BAHÍA BLANCA",
         "Contacto": "https://puertobahiablanca.com/",
         "Rubro": "Administracion y explotacion de infraestructura logistica y transporte maritimo"
@@ -987,7 +1087,7 @@ const empresasData = {
     {
       "type": "Feature",
       "properties": {
-        "id": 17,
+        "id": 18,
         "Empresaa": "Central Termoelectrica Guillermo Brown",
         "Contacto": "https://ageera.com.ar/portfolio_page/ct-guillermo-brown-sa/",
         "Rubro": "Generación de Energía Eléctrica con turbina dúal (gas-gasoil)"
@@ -1049,7 +1149,7 @@ const empresasData = {
     {
       "type": "Feature",
       "properties": {
-        "id": 18,
+        "id": 19,
         "Empresaa": "TGS Cerri",
         "Contacto": "https://www.tgs.com.ar/",
         "Rubro": "Procesamiento y transporte de ga"
@@ -1111,7 +1211,7 @@ const empresasData = {
     {
       "type": "Feature",
       "properties": {
-        "id": 19,
+        "id": 20,
         "Empresaa": "ADM Agro S.R.L",
         "Contacto": "https://www.adm.com/en-us/about-adm/locations/south-america/",
         "Rubro": "Servicio de elevación de granos"

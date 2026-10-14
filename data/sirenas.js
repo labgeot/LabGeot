@@ -1,34 +1,43 @@
 const sirenasData = {
   "type": "FeatureCollection",
+  "name": "SIRENA_APELL",
   "features": [
     {
       "type": "Feature",
-      "id": 1,
+      "properties": {
+        "id": 6,
+        "tip": "Sirena comunitaria",
+        "dir": "Lautaro 2700",
+        "ins": "Compus Scout Ernesto Pilling",
+        "num": null,
+        "res": null,
+        "Observacio": null
+      },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -62.2702565,
-          -38.7738449
+          -62.2741512,
+          -38.7730372
         ]
-      },
-      "properties": {
-        "Direc": "Lautaro 2700",
-        "Inst": "Compus Scout Ernesto Pilling"
       }
     },
     {
       "type": "Feature",
-      "id": 2,
+      "properties": {
+        "id": 7,
+        "tip": "Sirena comunitaria",
+        "dir": "Avenida Dasso 3475",
+        "ins": "Centro de Formación Profesional 401",
+        "num": null,
+        "res": null,
+        "Observacio": null
+      },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -62.2741515,
-          -38.7730373
+          -62.2702563,
+          -38.7738446
         ]
-      },
-      "properties": {
-        "Direc": "Avenida Dasso 3475",
-        "Inst": "Centro de Formación Profesional 401"
       }
     }
   ]

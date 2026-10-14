@@ -247,7 +247,7 @@
 
       <div class="card">
         <div class="card-icon"><i class="fas fa-industry"></i></div>
-        <h2 class="card-title">Empresas polo petroquímico</h2>
+        <h2 class="card-title">Empresas de 3era categoría</h2>
         <p class="card-desc">Polígonos de las instalaciones industriales y portuarias involucradas en el Proceso APELL.</p>
         <div class="card-meta">
           <span><i class="fas fa-file-code"></i> GeoJSON</span>
@@ -311,6 +311,17 @@
         <a href="data/confinamiento_act.geojson" download class="download-btn"><i class="fas fa-download" style="margin-right:8px;"></i>Descargar archivo</a>
       </div>
 
+      <div class="card">
+        <div class="card-icon"><i class="fas fa-building-columns"></i></div>
+        <h2 class="card-title">Edificios institucionales</h2>
+        <p class="card-desc">Ubicación y datos de contacto de organismos e instituciones clave del Proceso APELL y la comunidad de Ingeniero White.</p>
+        <div class="card-meta">
+          <span><i class="fas fa-file-code"></i> GeoJSON</span>
+          <span><i class="fas fa-weight-hanging"></i> 1 KB</span>
+        </div>
+        <a href="data/Instituciones.geojson" download class="download-btn"><i class="fas fa-download" style="margin-right:8px;"></i>Descargar archivo</a>
+      </div>
+
     </div>
   </div>
 
@@ -321,12 +332,13 @@
   <script src="data/respuesta.js?v=2"></script>
   <script src="data/delegaciones.js?v=2"></script>
   <script src="data/escuelas.js?v=3"></script>
-  <script src="data/empresas.js?v=3"></script>
-  <script src="data/mangas.js?v=2"></script>
-  <script src="data/puntos_encuentro.js?v=2"></script>
-  <script src="data/sirenas.js?v=2"></script>
+  <script src="data/empresas.js?v=5"></script>
+  <script src="data/mangas.js?v=4"></script>
+  <script src="data/puntos_encuentro.js?v=4"></script>
+  <script src="data/sirenas.js?v=4"></script>
   <script src="data/handies.js?v=1"></script>
   <script src="data/confinamiento.js?v=1"></script>
+  <script src="data/instituciones.js?v=1"></script>
   <script>
     // Función para descargar un objeto como archivo JSON
     function descargarJSON(data, filename) {
@@ -356,7 +368,8 @@
       { selector: 'a[href*="Delegaciones_municipales"]', data: typeof delegacionesData !== 'undefined' ? delegacionesData : null, filename: 'Delegaciones_municipales_partido_Bahia_Blanca.geojson' },
       { selector: 'a[href*="escuelas_ult.geojson"]', data: typeof escuelasData !== 'undefined' ? escuelasData : null, filename: 'escuelas_ult.geojson' },
       { selector: 'a[href*="handies_procesoapell.geojson"]', data: typeof handiesData !== 'undefined' ? handiesData : null, filename: 'handies_procesoapell.geojson' },
-      { selector: 'a[href*="confinamiento_act.geojson"]', data: typeof confinamientoData !== 'undefined' ? confinamientoData : null, filename: 'confinamiento_act.geojson' }
+      { selector: 'a[href*="confinamiento_act.geojson"]', data: typeof confinamientoData !== 'undefined' ? confinamientoData : null, filename: 'confinamiento_act.geojson' },
+      { selector: 'a[href*="Instituciones.geojson"]', data: typeof institucionesData !== 'undefined' ? institucionesData : null, filename: 'Instituciones.geojson' }
     ];
 
     descargas.forEach(item => {
