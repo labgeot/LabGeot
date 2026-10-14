@@ -177,6 +177,7 @@
     align-items: center;
     padding: 12px 20px;
     border-bottom: 1px solid #f0f0f0;
+    border-left: 4px solid transparent;
     cursor: pointer;
     transition: background 0.2s;
   }
@@ -1016,6 +1017,16 @@
           <i class="fas fa-shield-alt"></i> Información proceso APELL
         </div>
 
+        <div class="layer-item" id="instituciones-btn" onclick="toggleDropdown('instituciones')">
+            <i class="fas fa-chevron-right" id="instituciones-chevron" style="width:10px; margin-right:10px;"></i>
+            <i class="fas fa-building-columns" style="color: #2e7d32; font-size: 1rem; width: 18px; text-align: center;"></i>
+            <span class="layer-name">Edificios institucionales</span>
+            <i class="fas fa-eye-slash layer-visibility-icon" id="instituciones-visibility" onclick="event.stopPropagation(); toggleLayer('instituciones')"></i>
+        </div>
+        <div class="sub-layers" id="instituciones-list">
+            <div style="padding:10px; color:#999; font-size:0.8rem; text-align:center;">Cargando...</div>
+        </div>
+
         <div class="layer-item" id="mangas-btn" onclick="toggleDropdown('mangas')">
             <i class="fas fa-chevron-right" id="mangas-chevron" style="width:10px; margin-right:10px;"></i>
             <img src="img/manga_viento.png" alt="Mangas de viento" class="layer-icon-img">
@@ -1049,7 +1060,7 @@
         <div class="layer-item" id="empresas-btn" onclick="toggleDropdown('empresas')">
             <i class="fas fa-chevron-right" id="empresas-chevron" style="width:10px; margin-right:10px;"></i>
             <i class="fas fa-industry"></i>
-            <span class="layer-name">Empresas polo petroquímico</span>
+            <span class="layer-name">Empresas de 3era categoría</span>
             <i class="fas fa-eye-slash layer-visibility-icon" id="empresas-visibility" onclick="event.stopPropagation(); toggleLayer('empresas')"></i>
         </div>
         <div class="sub-layers" id="empresas-list">
@@ -1245,13 +1256,9 @@
             <img src="https://a.tile.openstreetmap.org/13/2767/4943.png" alt="OpenStreetMap">
             <span>OpenStreetMap</span>
         </div>
-        <div class="basemap-option" onclick="setBasemap('gstreets', this)">
-            <img src="https://mt0.google.com/vt/lyrs=m&hl=es&x=2767&y=4943&z=13" alt="Google Streets">
-            <span>Google Streets</span>
-        </div>
-        <div class="basemap-option" onclick="setBasemap('gsatellite', this)">
-            <img src="https://mt0.google.com/vt/lyrs=s&hl=es&x=2767&y=4943&z=13" alt="Google Satélite">
-            <span>Google Satélite</span>
+        <div class="basemap-option" onclick="setBasemap('esri', this)">
+            <img src="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/13/4943/2767" alt="Esri Satélite">
+            <span>Esri Satélite</span>
         </div>
       </div>
 
@@ -1267,12 +1274,13 @@
   <script src="data/respuesta.js?v=2"></script>
   <script src="data/delegaciones.js?v=2"></script>
   <script src="data/escuelas.js?v=3"></script>
-  <script src="data/empresas.js?v=3"></script>
-  <script src="data/mangas.js?v=2"></script>
-  <script src="data/puntos_encuentro.js?v=2"></script>
-  <script src="data/sirenas.js?v=2"></script>
+  <script src="data/empresas.js?v=5"></script>
+  <script src="data/mangas.js?v=4"></script>
+  <script src="data/puntos_encuentro.js?v=4"></script>
+  <script src="data/sirenas.js?v=4"></script>
   <script src="data/handies.js?v=1"></script>
   <script src="data/confinamiento.js?v=1"></script>
+  <script src="data/instituciones.js?v=1"></script>
   <script>
 
     const map = L.map('map', { zoomControl: false }).setView([-38.7833, -62.2667], 14);
@@ -1284,10 +1292,8 @@
     };
 
     const basemaps = {
-        osm: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { ...basemapOptions, maxZoom: 19, attribution: '© OpenStreetMap' }),
-        gstreets: L.tileLayer('https://mt0.google.com/vt/lyrs=m&hl=es&x={x}&y={y}&z={z}', { ...basemapOptions, maxZoom: 20, attribution: 'Google' }),
-        gsatellite: L.tileLayer('https://mt0.google.com/vt/lyrs=s&hl=es&x={x}&y={y}&z={z}', { ...basemapOptions, maxZoom: 20, attribution: 'Google' }),
-        carto: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { ...basemapOptions, maxZoom: 19, attribution: '© OpenStreetMap' })
+        osm: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { ...basemapOptions, maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }),
+        esri: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { ...basemapOptions, maxZoom: 19, attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community' })
     };
 
     let currentBasemap = basemaps.osm;
@@ -1318,7 +1324,7 @@
 
     function getFeatureName(props) {
         if (!props) return '';
-        return props.nom || props.NAME || props.Nombre || props.Name || props.inst || props.Inst || props.direc || props.Calle || '';
+        return props.nom || props.NAME || props.Nombre || props.Name || props.ins || props.ins || props.tip || props.Calle || '';
     }
 
     function findFeatureLayer(layerGroup, feature) {
@@ -1424,6 +1430,10 @@
     let confinamientoGeoJSON = null;
     let confinamientoLayerGroup = null;
     let isConfinamientoVisible = false;
+
+    let institucionesGeoJSON = null;
+    let institucionesLayerGroup = null;
+    let isInstitucionesVisible = false;
 
 
 
@@ -2088,20 +2098,20 @@
                     onEachFeature: (feature, layer) => {
                         const props = feature.properties;
                         const center = getLayerCenter(layer);
-                        let content = `<b>${props.inst || 'Manga de Viento'}</b><br>Ubicación / Dirección: ${props.Dire || '-'}`;
+                        let content = `<b>${props.ins || 'Manga de Viento'}</b><br>Ubicación / Dirección: ${props.dir || '-'}`;
                         if (center) {
                             content += renderPopupRouteButtons(center.lat, center.lng);
                         }
                         layer.bindPopup(content);
-                        if (props.inst) {
-                            layer.bindTooltip(formatMapLabel(props.inst), { permanent: true, direction: 'top', className: 'feature-label' });
+                        if (props.ins) {
+                            layer.bindTooltip(formatMapLabel(props.ins), { permanent: true, direction: 'top', className: 'feature-label' });
                         }
                     }
                 });
             }
 
             const featuresOrdenados = [...mangasGeoJSON.features].sort((a,b) => 
-                (a.properties.inst || "").localeCompare(b.properties.inst || "")
+                (a.properties.ins || "").localeCompare(b.properties.ins || "")
             );
 
             listDiv.innerHTML = '';
@@ -2110,8 +2120,8 @@
                 const item = document.createElement('div');
                 item.className = 'sub-layer-item';
                 const props = feature.properties;
-                const nom = props.inst || 'Manga de Viento';
-                const dir = props.Dire || 'Sin dirección';
+                const nom = props.ins || 'Manga de Viento';
+                const dir = props.dir || 'Sin dirección';
                 item.innerHTML = `<div>${nom}</div><div style="font-size:0.85em; opacity:0.8; line-height:1.2; margin-top:2px; font-weight:normal;">${dir}</div>`;
                 item.onclick = (e) => {
                     e.stopPropagation();
@@ -2152,12 +2162,12 @@
                     onEachFeature: (feature, layer) => {
                         const props = feature.properties;
                         const center = getLayerCenter(layer);
-                        let content = `<b>${props.direc || 'Punto de Encuentro'}</b><br>Lugar / Dirección: ${props.ins || '-'}`;
+                        let content = `<b>${props.tip || 'Punto de Encuentro'}</b><br>Lugar / Dirección: ${props.ins || '-'}${props.dir ? ' — ' + props.dir : ''}`;
                         if (center) {
                             content += renderPopupRouteButtons(center.lat, center.lng);
                         }
                         layer.bindPopup(content);
-                        const labelText = props.ins || props.direc;
+                        const labelText = props.ins || props.tip;
                         if (labelText) {
                             layer.bindTooltip(formatMapLabel(labelText), { permanent: true, direction: 'top', className: 'feature-label' });
                         }
@@ -2176,7 +2186,7 @@
                 item.className = 'sub-layer-item';
                 const props = feature.properties;
                 const nom = props.ins || 'Punto de Encuentro';
-                const dir = props.direc || '';
+                const dir = props.dir || props.tip || '';
                 item.innerHTML = `<div>${nom}</div><div style="font-size:0.85em; opacity:0.8; line-height:1.2; margin-top:2px; font-weight:normal;">${dir}</div>`;
                 item.onclick = (e) => {
                     e.stopPropagation();
@@ -2217,20 +2227,20 @@
                     onEachFeature: (feature, layer) => {
                         const props = feature.properties;
                         const center = getLayerCenter(layer);
-                        let content = `<b>Sirena APELL</b><br>Ubicación: ${props.Inst || '-'}<br>Dirección: ${props.Direc || '-'}`;
+                        let content = `<b>Sirena APELL</b><br>Ubicación: ${props.ins || '-'}<br>Dirección: ${props.dir || '-'}`;
                         if (center) {
                             content += renderPopupRouteButtons(center.lat, center.lng);
                         }
                         layer.bindPopup(content);
-                        if (props.Inst) {
-                            layer.bindTooltip(formatMapLabel(props.Inst), { permanent: true, direction: 'top', className: 'feature-label' });
+                        if (props.ins) {
+                            layer.bindTooltip(formatMapLabel(props.ins), { permanent: true, direction: 'top', className: 'feature-label' });
                         }
                     }
                 });
             }
 
             const featuresOrdenados = [...sirenasGeoJSON.features].sort((a,b) => 
-                (a.properties.Inst || "").localeCompare(b.properties.Inst || "")
+                (a.properties.ins || "").localeCompare(b.properties.ins || "")
             );
 
             listDiv.innerHTML = '';
@@ -2239,8 +2249,8 @@
                 const item = document.createElement('div');
                 item.className = 'sub-layer-item';
                 const props = feature.properties;
-                const nom = props.Inst || 'Sirena APELL';
-                const dir = props.Direc || 'Sin dirección';
+                const nom = props.ins || 'Sirena APELL';
+                const dir = props.dir || 'Sin dirección';
                 item.innerHTML = `<div>${nom}</div><div style="font-size:0.85em; opacity:0.8; line-height:1.2; margin-top:2px; font-weight:normal;">${dir}</div>`;
                 item.onclick = (e) => {
                     e.stopPropagation();
@@ -2417,6 +2427,78 @@
         }
     }
 
+    function initInstituciones() {
+        const listDiv = document.getElementById('instituciones-list');
+        try {
+            if(typeof institucionesData === 'undefined') {
+                throw new Error("El archivo instituciones.js no se cargó.");
+            }
+
+            institucionesGeoJSON = institucionesData;
+            if(!institucionesLayerGroup) {
+                institucionesLayerGroup = L.geoJSON(institucionesGeoJSON, {
+                    pointToLayer: function (feature, latlng) {
+                        return L.marker(latlng, { icon: createCustomIcon('fas fa-building-columns', '#2e7d32') });
+                    },
+                    onEachFeature: (feature, layer) => {
+                        const props = feature.properties;
+                        const center = getLayerCenter(layer);
+                        let content = `<div style="font-family:'Roboto',sans-serif;">
+                            <div style="font-size:1rem; font-weight:bold; color:#2e7d32; margin-bottom:4px;">${props.Nombre || 'Edificio Institucional'}</div>`;
+                        if (props['Dirección']) {
+                            content += `<div style="font-size:0.85rem; color:#444; margin-bottom:4px;"><i class="fas fa-map-marker-alt" style="color:#2e7d32; width:14px;"></i> ${props['Dirección']}</div>`;
+                        }
+                        if (props['Teléfono']) {
+                            content += `<div style="font-size:0.85rem; color:#444; margin-bottom:4px;"><i class="fas fa-phone" style="color:#2e7d32; width:14px;"></i> <a href="tel:${props['Teléfono']}" style="color:#2e7d32; text-decoration:none; font-weight:500;">${props['Teléfono']}</a></div>`;
+                        }
+                        if (center) {
+                            content += renderPopupRouteButtons(center.lat, center.lng);
+                        }
+                        content += `</div>`;
+                        layer.bindPopup(content);
+                        if (props.Nombre) {
+                            layer.bindTooltip(formatMapLabel(props.Nombre), { permanent: true, direction: 'top', className: 'feature-label' });
+                        }
+                    }
+                });
+            }
+
+            const featuresOrdenados = [...institucionesGeoJSON.features].sort((a,b) => 
+                (a.properties.Nombre || "").localeCompare(b.properties.Nombre || "")
+            );
+
+            listDiv.innerHTML = '';
+            
+            featuresOrdenados.forEach((feature) => {
+                const item = document.createElement('div');
+                item.className = 'sub-layer-item';
+                const props = feature.properties;
+                const nom = props.Nombre || 'Institución Sin Nombre';
+                const dir = props['Dirección'] || 'Sin dirección';
+                item.innerHTML = `<div>${nom}</div><div style="font-size:0.85em; opacity:0.8; line-height:1.2; margin-top:2px; font-weight:normal; color:#555;"><i class="fas fa-map-marker-alt" style="font-size:0.75em; margin-right:3px;"></i>${dir}</div>`;
+                item.onclick = (e) => {
+                    e.stopPropagation();
+                    const targetLayer = findFeatureLayer(institucionesLayerGroup, feature);
+                    if (!targetLayer) return;
+
+                    if (!map.hasLayer(targetLayer)) {
+                        map.addLayer(targetLayer);
+                        item.classList.add('active');
+                    } else {
+                        map.removeLayer(targetLayer);
+                        item.classList.remove('active');
+                    }
+                    zoomAInstitucion(feature);
+                    updateMainLayerVisibilityState('instituciones');
+                };
+                listDiv.appendChild(item);
+            });
+        } catch(e) {
+            console.error("Error cargando instituciones:", e);
+            listDiv.innerHTML = '<div style="padding:10px; color:red; font-size:0.8rem; text-align:center;">Error cargando datos. (' + e.message + ')</div>';
+        }
+    }
+
     function toggleDropdown(capa) {
         const list = document.getElementById(capa + '-list');
         const chev = document.getElementById(capa + '-chevron');
@@ -2476,6 +2558,7 @@
         else if (capa === 'sirenas') isSirenasVisible = visible;
         else if (capa === 'handies') isHandiesVisible = visible;
         else if (capa === 'confinamiento') isConfinamientoVisible = visible;
+        else if (capa === 'instituciones') isInstitucionesVisible = visible;
     }
 
     function getLayerGroupByName(capa) {
@@ -2492,6 +2575,7 @@
         if (capa === 'sirenas') return sirenasLayerGroup;
         if (capa === 'handies') return handiesLayerGroup;
         if (capa === 'confinamiento') return confinamientoLayerGroup;
+        if (capa === 'instituciones') return institucionesLayerGroup;
         return null;
     }
 
@@ -2729,6 +2813,7 @@
     function zoomASirena(featureBuscar) { zoomAFeature(sirenasLayerGroup, featureBuscar, 16); }
     function zoomAHandie(featureBuscar) { zoomAFeature(handiesLayerGroup, featureBuscar, 16); }
     function zoomAConfinamiento(featureBuscar) { zoomAFeature(confinamientoLayerGroup, featureBuscar, 16); }
+    function zoomAInstitucion(featureBuscar) { zoomAFeature(institucionesLayerGroup, featureBuscar, 17); }
 
     function handleGlobalSearch(e) {
         const query = e.target.value.toLowerCase().trim();
@@ -2793,14 +2878,14 @@
         if (empresasGeoJSON) {
             empresasGeoJSON.features.forEach(f => {
                 if (f.properties.Empresaa && f.properties.Empresaa.toLowerCase().includes(query)) {
-                    matches.push({ layer: 'empresas', feature: f, title: f.properties.Empresaa, type: 'Empresas Polo Petroquímico' });
+                    matches.push({ layer: 'empresas', feature: f, title: f.properties.Empresaa, type: 'Empresas de 3era categoría' });
                 }
             });
         }
         if (mangasGeoJSON) {
             mangasGeoJSON.features.forEach(f => {
-                if (f.properties.inst && f.properties.inst.toLowerCase().includes(query)) {
-                    matches.push({ layer: 'mangas', feature: f, title: f.properties.inst, type: 'Manga de Viento' });
+                if (f.properties.ins && f.properties.ins.toLowerCase().includes(query)) {
+                    matches.push({ layer: 'mangas', feature: f, title: f.properties.ins, type: 'Manga de Viento' });
                 }
             });
         }
@@ -2813,7 +2898,7 @@
         }
         if (sirenasGeoJSON) {
             sirenasGeoJSON.features.forEach(f => {
-                const title = f.properties.Inst || f.properties.Direc || 'Sirena comunitaria';
+                const title = f.properties.ins || f.properties.dir || 'Sirena comunitaria';
                 if (title.toLowerCase().includes(query)) {
                     matches.push({ layer: 'sirenas', feature: f, title: title, type: 'Sirenas comunitarias' });
                 }
@@ -2833,6 +2918,15 @@
                 const title = f.properties.Nombre || 'Lugar de Confinamiento';
                 if (title.toLowerCase().includes(query)) {
                     matches.push({ layer: 'confinamiento', feature: f, title: title, type: 'Lugar de Confinamiento' });
+                }
+            });
+        }
+        if (institucionesGeoJSON) {
+            institucionesGeoJSON.features.forEach(f => {
+                const title = f.properties.Nombre || 'Edificio Institucional';
+                const dir = f.properties['Dirección'] ? ` - ${f.properties['Dirección']}` : '';
+                if ((title + dir).toLowerCase().includes(query)) {
+                    matches.push({ layer: 'instituciones', feature: f, title: title + dir, type: 'Edificios Institucionales' });
                 }
             });
         }
@@ -2913,6 +3007,7 @@
                     if (m.layer === 'sirenas' && !isSirenasVisible) toggleLayer('sirenas');
                     if (m.layer === 'handies' && !isHandiesVisible) toggleLayer('handies');
                     if (m.layer === 'confinamiento' && !isConfinamientoVisible) toggleLayer('confinamiento');
+                    if (m.layer === 'instituciones' && !isInstitucionesVisible) toggleLayer('instituciones');
 
                     setTimeout(() => {
                         if (m.layer === 'barrios') zoomABarrio(m.feature);
@@ -2928,6 +3023,7 @@
                         if (m.layer === 'sirenas') zoomASirena(m.feature);
                         if (m.layer === 'handies') zoomAHandie(m.feature);
                         if (m.layer === 'confinamiento') zoomAConfinamiento(m.feature);
+                        if (m.layer === 'instituciones') zoomAInstitucion(m.feature);
                     }, 100);
                 };
                 resultsContainer.appendChild(item);
@@ -3068,6 +3164,7 @@
     initSirenas();
     initHandies();
     initConfinamiento();
+    initInstituciones();
     initAreaInfluencia();
     toggleAreaInfluencia();
 
@@ -3464,7 +3561,7 @@
                     dashArray: "5, 5"
                 });
                 
-                const nom = feature.properties.inst || 'Manga de Viento';
+                const nom = feature.properties.ins || 'Manga de Viento';
                 poly.bindPopup(`<b>Proyección del Viento en Tiempo Real</b><br>Manga: ${nom}<br>Viento actual: ${currentWindDirection}° (${currentWindSpeed} km/h)`);
                 windPolygonsLayerGroup.addLayer(poly);
             }
@@ -3562,7 +3659,7 @@
               <div class="welcome-icon-badge layers"><i class="fas fa-eye"></i></div>
               <div class="welcome-guide-content">
                 <strong>Activar y Desactivar Capas</strong>
-                <p>Desplegá el menú lateral izquierdo para encender o apagar distintas capas de información geoespacial (barrios, sirenas comunitarias, centros de salud, escuelas, comedores, empresas del Polo Petroquímico, etc.) haciendo clic en los iconos de ojo.</p>
+                <p>Desplegá el menú lateral izquierdo para encender o apagar distintas capas de información geoespacial (barrios, sirenas comunitarias, centros de salud, escuelas, comedores, empresas de 3era categoría, etc.) haciendo clic en los iconos de ojo.</p>
               </div>
             </div>
 

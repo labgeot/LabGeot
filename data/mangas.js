@@ -6,8 +6,12 @@ const mangasData = {
       "type": "Feature",
       "properties": {
         "id": 1,
-        "Dire": "Ingeniero Luiggi 2699",
-        "inst": "Escuela E.P. 70"
+        "tip": "Manga de viento",
+        "dir": "Ingeniero Luiggi 2699",
+        "ins": "Escuela E.P. 70",
+        "num": null,
+        "res": null,
+        "Observacio": null
       },
       "geometry": {
         "type": "Point",
@@ -21,14 +25,18 @@ const mangasData = {
       "type": "Feature",
       "properties": {
         "id": 2,
-        "Dire": null,
-        "inst": "Tanque de agua"
+        "tip": "Manga de viento",
+        "dir": null,
+        "ins": "Tanque de agua",
+        "num": null,
+        "res": null,
+        "Observacio": null
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -62.2790599,
-          -38.771502
+          -62.272003,
+          -38.7658288
         ]
       }
     },
@@ -36,14 +44,18 @@ const mangasData = {
       "type": "Feature",
       "properties": {
         "id": 3,
-        "Dire": "Avenida San Martin 3105",
-        "inst": "Club Atlético Comercial"
+        "tip": "Manga de viento",
+        "dir": "Avenida San Martin 3105",
+        "ins": "Club Atlético Puerto Belgrano",
+        "num": null,
+        "res": null,
+        "Observacio": null
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -62.2708997,
-          -38.7804038
+          -62.2708987,
+          -38.7804018
         ]
       }
     },
@@ -51,13 +63,17 @@ const mangasData = {
       "type": "Feature",
       "properties": {
         "id": 4,
-        "Dire": "Daniel de Solier 4037",
-        "inst": "Club Atlético Huracán"
+        "tip": "Manga de viento",
+        "dir": "Daniel de Solier 4037",
+        "ins": "Club Atlético Huracán",
+        "num": null,
+        "res": null,
+        "Observacio": null
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -62.2543743,
+          -62.2543742,
           -38.7814848
         ]
       }
@@ -66,13 +82,17 @@ const mangasData = {
       "type": "Feature",
       "properties": {
         "id": 5,
-        "Dire": "Avenida San Martin 3466",
-        "inst": "Delegación Municipal Ingeniero White"
+        "tip": "Manga de Viento",
+        "dir": "Avenida San Martin 3466",
+        "ins": "Delegación Municipal Ingeniero White",
+        "num": null,
+        "res": null,
+        "Observacio": null
       },
       "geometry": {
         "type": "Point",
         "coordinates": [
-          -62.2679463,
+          -62.2679461,
           -38.7814013
         ]
       }
