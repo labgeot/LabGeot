@@ -1474,7 +1474,7 @@ const centrosSaludData = {
       "type": "Feature",
       "properties": {
         "id": 23,
-        "nom": "Hospital Dr. Felipe Glasman (HAM",
+        "nom": "Hospital Dr. Felipe Glasman (HAM)",
         "dir": "Patricios 347",
         "res": null,
         "num": "2914557877",
