@@ -525,9 +525,9 @@
       text-shadow: 1.5px 1.5px 2px #ffffff, -1.5px -1.5px 2px #ffffff, 1.5px -1.5px 2px #ffffff, -1.5px 1.5px 2px #ffffff, 0 0 4px #ffffff !important;
       opacity: 0.95 !important;
       visibility: visible !important;
-      font-size: 0.62rem !important;
-      font-weight: 400 !important;
-      max-width: 85px !important;
+      font-size: 0.72rem !important;
+      font-weight: 600 !important;
+      max-width: 120px !important;
       transition: opacity 0.3s ease, transform 0.3s ease !important;
     }
     .empresas-label {
@@ -1281,6 +1281,7 @@
   <script src="data/handies.js?v=1"></script>
   <script src="data/confinamiento.js?v=1"></script>
   <script src="data/instituciones.js?v=1"></script>
+  <script src="data/area_influencia.js?v=1"></script>
   <script>
 
     const map = L.map('map', { zoomControl: false }).setView([-38.7833, -62.2667], 14);
@@ -2576,39 +2577,29 @@
         if (capa === 'handies') return handiesLayerGroup;
         if (capa === 'confinamiento') return confinamientoLayerGroup;
         if (capa === 'instituciones') return institucionesLayerGroup;
+        if (capa === 'area_influencia') return areaInfluenciaLayerGroup;
         return null;
     }
 
     let areaInfluenciaLayerGroup = null;
     let isAreaInfluenciaActive = false;
-    let ingWhiteBarrioLayer = null;
-    let ingWhiteDelegationLayer = null;
 
     function initAreaInfluencia() {
         if (areaInfluenciaLayerGroup) return;
-        if (typeof barriosData !== 'undefined') {
-            barriosGeoJSON = barriosData;
-            const targetBarrios = ['white', 'ingeniero', 'justo', 'saladero', 'delfina', 'paraguaya', 'loma', '26', 'septiembre'];
-            areaInfluenciaLayerGroup = L.geoJSON(barriosGeoJSON, {
-                filter: (feature) => {
-                    const nom = getFeatureName(feature.properties).toLowerCase();
-                    return targetBarrios.some(term => nom.includes(term));
-                },
+        if (typeof areaInfluenciaData !== 'undefined') {
+            areaInfluenciaLayerGroup = L.geoJSON(areaInfluenciaData, {
                 style: {
                     color: '#0288d1',
-                    weight: 3,
+                    weight: 2.5,
                     fillColor: '#00acc1',
-                    fillOpacity: 0.4
+                    fillOpacity: 0.35
                 },
                 onEachFeature: (feature, layer) => {
                     const nomRaw = getFeatureName(feature.properties);
-                    const center = getLayerCenter(layer);
-                    let content = `<b>${nomRaw || 'Barrio Proceso APELL'}</b>`;
-                    if (center) {
-                        content += renderPopupRouteButtons(center.lat, center.lng);
+                    // Mantener únicamente "Barrio Ingeniero White" y omitir "Ingeniero White" para evitar superposición
+                    if (!nomRaw || nomRaw.trim().toLowerCase() === 'ingeniero white') {
+                        return;
                     }
-                    layer.bindPopup(content);
-
                     const nameFormatted = formatMapLabel(nomRaw);
                     if (nameFormatted) {
                         layer.bindTooltip(nameFormatted, {
@@ -2616,20 +2607,7 @@
                             direction: 'center',
                             className: 'polygon-label area-influencia-label'
                         });
-                        const upper = nameFormatted.toUpperCase();
-                        if (upper.includes('WHITE') || upper.includes('INGENIERO')) {
-                            ingWhiteBarrioLayer = layer;
-                        }
                     }
-                }
-            });
-        }
-
-        if (delegacionesLayerGroup) {
-            delegacionesLayerGroup.eachLayer(l => {
-                const nom = (l.feature?.properties?.nom || '').toLowerCase();
-                if (nom.includes('white') || nom.includes('ingeniero')) {
-                    ingWhiteDelegationLayer = l;
                 }
             });
         }
@@ -2656,20 +2634,8 @@
                 map.addLayer(areaInfluenciaLayerGroup);
             }
 
-            if (ingWhiteDelegationLayer) {
-                if (!map.hasLayer(ingWhiteDelegationLayer)) {
-                    map.addLayer(ingWhiteDelegationLayer);
-                }
-                ingWhiteDelegationLayer.setStyle({
-                    color: '#0288d1',
-                    weight: 3,
-                    fillColor: '#00acc1',
-                    fillOpacity: 0.5
-                });
-            }
-
             if (areaInfluenciaLayerGroup && areaInfluenciaLayerGroup.getBounds && areaInfluenciaLayerGroup.getBounds().isValid()) {
-                map.fitBounds(areaInfluenciaLayerGroup.getBounds(), { padding: [50, 50], animate: false });
+                map.setView(areaInfluenciaLayerGroup.getBounds().getCenter(), 13);
             }
         } else {
             isAreaInfluenciaActive = false;
@@ -2683,13 +2649,6 @@
             if (areaInfluenciaLayerGroup && map.hasLayer(areaInfluenciaLayerGroup)) {
                 map.removeLayer(areaInfluenciaLayerGroup);
             }
-
-            if (ingWhiteDelegationLayer) {
-                ingWhiteDelegationLayer.setStyle({ color: '#00796b', weight: 2, fillColor: '#009688', fillOpacity: 0.3 });
-                if (!isDelegacionesVisible && map.hasLayer(ingWhiteDelegationLayer)) {
-                    map.removeLayer(ingWhiteDelegationLayer);
-                }
-            }
         }
     }
 
@@ -2700,20 +2659,8 @@
         const activeItems = document.querySelectorAll('#' + capa + '-list .sub-layer-item.active');
         const layerGroup = getLayerGroupByName(capa);
 
-        if (capa === 'barrios') {
-            if (isAreaInfluenciaActive) {
-                isAreaInfluenciaActive = false;
-                const areaBtn = document.getElementById('area-influencia-btn');
-                const areaIcon = document.getElementById('area-influencia-visibility');
-                if (areaBtn) areaBtn.classList.remove('active');
-                if (areaIcon) {
-                    areaIcon.classList.replace('fa-eye', 'fa-eye-slash');
-                    areaIcon.classList.remove('on');
-                }
-            }
-            if (barriosLayerGroup) {
-                barriosLayerGroup.setStyle({ color: '#2e7d32', weight: 2, fillColor: '#4caf50', fillOpacity: 0.3 });
-            }
+        if (capa === 'barrios' && barriosLayerGroup) {
+            barriosLayerGroup.setStyle({ color: '#2e7d32', weight: 2, fillColor: '#4caf50', fillOpacity: 0.3 });
         }
 
         const isCurrentlyOn = (activeItems.length > 0) || (btn && btn.classList.contains('active')) || (icon && icon.classList.contains('on'));
@@ -2733,20 +2680,6 @@
             }
             listItems.forEach(el => el.classList.remove('active'));
             setLayerVisibleVar(capa, false);
-
-            if (capa === 'delegaciones' && isAreaInfluenciaActive && ingWhiteDelegationLayer) {
-                if (!map.hasLayer(ingWhiteDelegationLayer)) {
-                    map.addLayer(ingWhiteDelegationLayer);
-                }
-                if (ingWhiteDelegationLayer.setStyle) {
-                    ingWhiteDelegationLayer.setStyle({
-                        color: '#0288d1',
-                        weight: 3,
-                        fillColor: '#00acc1',
-                        fillOpacity: 0.5
-                    });
-                }
-            }
         } else {
             // Encender todos los elementos de esta capa
             if (btn) btn.classList.add('active');
@@ -2759,14 +2692,6 @@
                 layerGroup.eachLayer(l => {
                     if (!map.hasLayer(l)) map.addLayer(l);
                 });
-                try {
-                    if (!areaInfluenciaLayerGroup) {
-                        initAreaInfluencia();
-                    }
-                    if (areaInfluenciaLayerGroup && areaInfluenciaLayerGroup.getBounds && areaInfluenciaLayerGroup.getBounds().isValid()) {
-                        map.setView(areaInfluenciaLayerGroup.getBounds().getCenter(), 13);
-                    }
-                } catch(e) {}
             }
             listItems.forEach(el => el.classList.add('active'));
             setLayerVisibleVar(capa, true);
