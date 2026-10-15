@@ -2695,6 +2695,16 @@
             }
             listItems.forEach(el => el.classList.add('active'));
             setLayerVisibleVar(capa, true);
+
+            // Centrar sobre el área de influencia al activar una capa
+            try {
+                if (!areaInfluenciaLayerGroup) {
+                    initAreaInfluencia();
+                }
+                if (areaInfluenciaLayerGroup && areaInfluenciaLayerGroup.getBounds && areaInfluenciaLayerGroup.getBounds().isValid()) {
+                    map.setView(areaInfluenciaLayerGroup.getBounds().getCenter(), 13);
+                }
+            } catch(e) {}
         }
 
         if (capa === 'mangas') {
