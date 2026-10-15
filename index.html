@@ -2673,13 +2673,20 @@
                 icon.classList.remove('on');
             }
             if (layerGroup) {
-                if (map.hasLayer(layerGroup)) map.removeLayer(layerGroup);
-                layerGroup.eachLayer(l => {
-                    if (map.hasLayer(l)) map.removeLayer(l);
-                });
+                const removeRecursively = (grp) => {
+                    if (!grp) return;
+                    if (map.hasLayer(grp)) {
+                        map.removeLayer(grp);
+                    }
+                    if (grp.eachLayer) {
+                        grp.eachLayer(sub => removeRecursively(sub));
+                    }
+                };
+                removeRecursively(layerGroup);
             }
             listItems.forEach(el => el.classList.remove('active'));
             setLayerVisibleVar(capa, false);
+            map.closePopup();
         } else {
             // Encender todos los elementos de esta capa
             if (btn) btn.classList.add('active');
@@ -3256,6 +3263,7 @@
         customOriginLatLng = null;
         updateCustomOriginUI();
         toggleCustomOriginPickMode(false);
+        borrarRuta();
     }
 
     function abrirRuta(destLat, destLng) {
@@ -3366,6 +3374,7 @@
             map.removeLayer(currentRouteLine);
             currentRouteLine = null;
         }
+        activeRouteDestination = null;
         document.getElementById('route-panel').style.display = 'none';
     }
 
