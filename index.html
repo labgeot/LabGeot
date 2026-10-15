@@ -634,75 +634,239 @@
 
   /* --- Adaptación Móvil Responsive --- */
   @media (max-width: 768px) {
+    header {
+      height: 52px;
+      padding: 0 10px;
+    }
+
+    .logo-container {
+      gap: 6px;
+    }
+
+    .logo-container a img[src="logo.png"] {
+      height: 36px !important;
+    }
+
+    .logo-container a img[src="muni_bahia.webp"],
+    .logo-container a img[src="labgeot.png"] {
+      height: 20px !important;
+    }
+
+    .header-buttons {
+      gap: 6px;
+    }
+
+    .header-buttons .btn-text {
+      display: none;
+    }
+
+    .header-buttons .btn-outline,
+    .header-buttons .btn-fill {
+      padding: 6px 10px;
+      font-size: 0.9rem;
+      min-width: 34px;
+      height: 34px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+
+    .header-buttons .btn-outline i,
+    .header-buttons .btn-fill i {
+      margin-right: 0 !important;
+    }
+
+    .main-container {
+      height: calc(100% - 52px);
+      height: calc(100dvh - 52px);
+    }
+
     #sidebar {
       position: absolute;
       top: 0;
       left: 0;
       bottom: 0;
       height: 100%;
+      width: min(320px, 86vw);
+      max-width: 86vw;
       z-index: 1005;
-      box-shadow: 2px 0 12px rgba(0, 0, 0, 0.25);
+      box-shadow: 2px 0 16px rgba(0, 0, 0, 0.28);
+      margin-left: 0;
+      transform: translateX(0);
+      transition: transform 0.3s ease;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    #sidebar.collapsed {
+      margin-left: 0;
+      transform: translateX(-100%);
     }
 
     #sidebar:not(.collapsed) ~ #sidebar-overlay {
       display: block;
     }
 
+    #sidebar:not(.collapsed) ~ .toggle-sidebar {
+      display: none !important;
+    }
+
+    .sidebar-header {
+      padding: 14px 16px;
+    }
+
     .close-sidebar-btn {
       display: inline-block;
     }
 
+    .toggle-sidebar {
+      top: 10px;
+      left: 10px;
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
     .map-overlay-search {
-      top: 12px;
-      right: 60px;
-      left: 55px;
+      top: 10px;
+      left: 56px;
+      right: 10px;
       width: auto;
+      height: 38px;
+      padding: 0 12px;
+      border-radius: 20px;
+      box-sizing: border-box;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .map-overlay-search input {
+      font-size: 0.85rem;
+      padding: 4px 0;
     }
 
     .global-search-results {
-      top: 55px;
-      right: 15px;
-      left: 15px;
+      top: 52px;
+      left: 10px;
+      right: 10px;
       width: auto;
+      max-height: 260px;
     }
 
     .floating-tools {
-      top: 60px;
+      top: 58px;
       right: 10px;
+      gap: 6px;
+    }
+
+    .tool-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     }
 
     .basemap-selector {
-      top: 60px;
-      right: 60px;
+      top: 58px;
+      right: 54px;
       flex-direction: column;
-      max-width: 110px;
+      max-width: 100px;
+      padding: 6px;
+      gap: 6px;
+    }
+
+    .basemap-option {
+      width: 70px;
+      padding: 4px;
+    }
+
+    .basemap-option img {
+      width: 48px;
+      height: 48px;
     }
 
     #route-panel {
       left: 10px;
-      bottom: 25px;
-      width: calc(100% - 70px);
-      max-width: 280px;
+      bottom: 24px;
+      width: calc(100% - 20px);
+      max-width: 320px;
+      padding: 12px;
+      box-sizing: border-box;
     }
 
-    .header-buttons {
-      gap: 8px;
+    .map-footer {
+      left: 0;
+      right: auto;
+      bottom: 0;
+      border-top-left-radius: 0;
+      border-top-right-radius: 6px;
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      background: rgba(255, 255, 255, 0.85);
     }
-    .header-buttons .btn-text {
-      display: none;
+
+    .apell-modal-backdrop {
+      padding: 10px;
     }
-    .header-buttons .btn-outline i, .header-buttons .btn-fill i {
-      margin-right: 0 !important;
+
+    .apell-modal-container {
+      max-height: 88dvh;
+      border-radius: 10px;
     }
-    .header-buttons .btn-outline, .header-buttons .btn-fill {
-      padding: 8px 12px;
-      font-size: 1rem;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 38px;
-      height: 38px;
-      box-sizing: border-box;
+
+    .apell-modal-header {
+      padding: 12px 16px;
+    }
+
+    .apell-modal-header h2 {
+      font-size: 1.05rem;
+    }
+
+    .apell-modal-icon {
+      font-size: 1.2rem;
+    }
+
+    .apell-modal-body {
+      padding: 14px 16px;
+      font-size: 0.88rem;
+      line-height: 1.48;
+    }
+
+    .welcome-guide-item {
+      padding: 10px 12px;
+      gap: 10px;
+    }
+
+    .welcome-icon-badge {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      font-size: 0.95rem;
+    }
+
+    .welcome-guide-content strong {
+      font-size: 0.9rem;
+    }
+
+    .welcome-guide-content p {
+      font-size: 0.82rem;
+    }
+
+    .apell-modal-footer {
+      padding: 10px 16px;
+    }
+
+    .leaflet-popup-content {
+      margin: 10px 12px;
+      font-size: 0.85rem;
+      max-width: 250px !important;
     }
   }
 
@@ -988,9 +1152,7 @@
   </header>
 
   <div class="main-container">
-    <button class="toggle-sidebar" onclick="toggleSidebar()" title="Abrir / Cerrar capas"><i class="fas fa-eye"></i></button>
-
-    <div id="sidebar">
+    <div id="sidebar" class="collapsed">
       <div class="sidebar-header">
         <div style="display: flex; align-items: center; gap: 8px;">
           <span style="font-weight: 800; font-size: 1.1rem; color: #444; letter-spacing: 0.5px;">MapAPELL <span style="font-weight: 400; color: #888;">| Capas</span></span>
@@ -1212,11 +1374,15 @@
       </div>
     </div>
 
+    <button class="toggle-sidebar" onclick="toggleSidebar()" title="Abrir / Cerrar capas"><i class="fas fa-eye"></i></button>
     <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
     <div id="map">
       <div class="map-overlay-search">
         <input type="text" id="global-search-input" placeholder="Buscar por nombre de ubicación..." oninput="handleGlobalSearch(event)">
+        <button id="global-search-clear-btn" onclick="clearGlobalSearch()" title="Borrar búsqueda" style="display:none; background:none; border:none; color:#888; cursor:pointer; padding:2px 6px; font-size:0.95rem; align-items:center; justify-content:center;">
+          <i class="fas fa-times-circle"></i>
+        </button>
         <i class="fas fa-search" style="color: #999;"></i>
       </div>
       <div id="global-search-results" class="global-search-results"></div>
@@ -1532,7 +1698,16 @@
                     onEachFeature: (feature, layer) => {
                         const props = feature.properties;
                         const center = getLayerCenter(layer);
-                        let content = `<b>${props.nom || 'Centro de Salud'}</b><br>Dirección: ${props.dir || '-'}<br>Tipo: ${props.tip || '-'}`;
+                        const gesRaw = (props.ges || '').toLowerCase();
+                        let gestion = 'Público';
+                        if (gesRaw.includes('privado') || gesRaw.includes('asistenciales') || (props.nom && props.nom.toLowerCase().includes('asociación médica'))) {
+                            gestion = 'Privado';
+                        } else if (gesRaw.includes('público') || gesRaw.includes('publico') || gesRaw.includes('sanitaria') || gesRaw.includes('centro de salud') || gesRaw.includes('quemados')) {
+                            gestion = 'Público';
+                        } else if (props.ges) {
+                            gestion = props.ges;
+                        }
+                        let content = `<b>${props.nom || 'Centro de Salud'}</b><br>Dirección: ${props.dir || '-'}<br>Gestión: ${gestion}`;
                         if (props.num) {
                             content += `<br>Teléfono: ${props.num}`;
                         }
@@ -1677,22 +1852,23 @@
                     style: { color: '#1976d2', weight: 2, fillColor: '#2196f3', fillOpacity: 0.3 },
                     pointToLayer: (feature, latlng) => L.marker(latlng, { icon: createCustomIcon('fas fa-futbol', '#1976d2') }),
                     onEachFeature: (feature, layer) => {
+                        const props = feature.properties;
                         const center = getLayerCenter(layer);
-                        let content = `<b>${feature.properties.Name || 'Establecimiento Deportivo'}</b>`;
+                        let content = `<b>${props.Name || 'Establecimiento Deportivo'}</b><br>Dirección: ${props.dir || '-'}`;
                         if (center) {
                             content += renderPopupRouteButtons(center.lat, center.lng);
                             if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
                                 const iconMarker = L.marker(center, { icon: createCustomIcon('fas fa-futbol', '#1976d2') });
                                 iconMarker.bindPopup(content);
-                                if (feature.properties.Name) {
-                                    iconMarker.bindTooltip(formatMapLabel(feature.properties.Name), { permanent: true, direction: 'top', className: 'feature-label' });
+                                if (props.Name) {
+                                    iconMarker.bindTooltip(formatMapLabel(props.Name), { permanent: true, direction: 'top', className: 'feature-label' });
                                 }
                                 centerMarkers.push(iconMarker);
                             }
                         }
                         layer.bindPopup(content);
-                        if (feature.properties.Name) {
-                            layer.bindTooltip(formatMapLabel(feature.properties.Name), { permanent: true, direction: 'top', className: 'feature-label' });
+                        if (props.Name) {
+                            layer.bindTooltip(formatMapLabel(props.Name), { permanent: true, direction: 'top', className: 'feature-label' });
                         }
                     }
                 });
@@ -1762,22 +1938,26 @@
                         return L.marker(latlng, { icon: getRespuestaIcon(feature.properties?.tip, feature.properties?.nom) });
                     },
                     onEachFeature: (feature, layer) => {
+                        const props = feature.properties || {};
                         const center = getLayerCenter(layer);
-                        let content = `<b>${feature.properties.nom || 'Respuesta Primaria'}</b><br>Tipo: ${feature.properties.tip || '-'}<br>Dirección: ${feature.properties.dir || '-'}`;
+                        let content = `<b>${props.nom || 'Respuesta Primaria'}</b><br>Tipo: ${props.tip || '-'}<br>Dirección: ${props.dir || '-'}`;
+                        if (props.num) {
+                            content += `<br>Teléfono: ${props.num}`;
+                        }
                         if (center) {
                             content += renderPopupRouteButtons(center.lat, center.lng);
                             if (layer instanceof L.Polygon || layer instanceof L.Polyline) {
-                                const iconMarker = L.marker(center, { icon: getRespuestaIcon(feature.properties?.tip, feature.properties?.nom) });
+                                const iconMarker = L.marker(center, { icon: getRespuestaIcon(props.tip, props.nom) });
                                 iconMarker.bindPopup(content);
-                                if (feature.properties.nom) {
-                                    iconMarker.bindTooltip(formatMapLabel(feature.properties.nom), { permanent: true, direction: 'top', className: 'feature-label' });
+                                if (props.nom) {
+                                    iconMarker.bindTooltip(formatMapLabel(props.nom), { permanent: true, direction: 'top', className: 'feature-label' });
                                 }
                                 centerMarkers.push(iconMarker);
                             }
                         }
                         layer.bindPopup(content);
-                        if (feature.properties.nom) {
-                            layer.bindTooltip(formatMapLabel(feature.properties.nom), { permanent: true, direction: 'top', className: 'feature-label' });
+                        if (props.nom) {
+                            layer.bindTooltip(formatMapLabel(props.nom), { permanent: true, direction: 'top', className: 'feature-label' });
                         }
                     }
                 });
@@ -2301,7 +2481,7 @@
                         if (props.num) {
                             content += `<div style="font-size:0.85rem; color:#444; margin-bottom:2px;"><i class="fas fa-phone" style="color:#666; width:14px;"></i> Tel: ${props.num}</div>`;
                         }
-                        if (props.obs) {
+                        if (props.obs && !props.obs.toLowerCase().includes('última actualización') && !props.obs.toLowerCase().includes('ultima actualizacion')) {
                             content += `<div style="font-size:0.75rem; color:#777; margin-top:4px; font-style:italic;">${props.obs}</div>`;
                         }
                         if (center) {
@@ -2757,10 +2937,40 @@
     function zoomAConfinamiento(featureBuscar) { zoomAFeature(confinamientoLayerGroup, featureBuscar, 16); }
     function zoomAInstitucion(featureBuscar) { zoomAFeature(institucionesLayerGroup, featureBuscar, 17); }
 
-    function handleGlobalSearch(e) {
-        const query = e.target.value.toLowerCase().trim();
+    function clearGlobalSearch() {
+        const input = document.getElementById('global-search-input');
+        if (input) input.value = '';
         const resultsContainer = document.getElementById('global-search-results');
-        
+        if (resultsContainer) resultsContainer.style.display = 'none';
+        clearTimeout(window.geocodeSearchTimeout);
+        if (globalSearchMarker) {
+            map.removeLayer(globalSearchMarker);
+            globalSearchMarker = null;
+        }
+        const clearBtn = document.getElementById('global-search-clear-btn');
+        if (clearBtn) clearBtn.style.display = 'none';
+    }
+
+    function handleGlobalSearch(e) {
+        const val = e.target.value;
+        const query = val.toLowerCase().trim();
+        const resultsContainer = document.getElementById('global-search-results');
+        const clearBtn = document.getElementById('global-search-clear-btn');
+
+        if (clearBtn) {
+            clearBtn.style.display = val.length > 0 ? 'inline-flex' : 'none';
+        }
+
+        if (query.length === 0) {
+            clearTimeout(window.geocodeSearchTimeout);
+            resultsContainer.style.display = 'none';
+            if (globalSearchMarker) {
+                map.removeLayer(globalSearchMarker);
+                globalSearchMarker = null;
+            }
+            return;
+        }
+
         if (query.length < 2) {
             resultsContainer.style.display = 'none';
             return;
@@ -2923,17 +3133,43 @@
                 item.innerHTML = `<span class="global-search-title">${m.title}</span><span class="global-search-type">${m.type}</span>`;
                 item.onclick = () => {
                     resultsContainer.style.display = 'none';
-                    inputElement.value = '';
+                    const clearBtn = document.getElementById('global-search-clear-btn');
                     
                     if (m.isAddress) {
                         map.setView([m.lat, m.lon], 17);
                         if (globalSearchMarker) {
                             map.removeLayer(globalSearchMarker);
                         }
+                        inputElement.value = m.title;
+                        if (clearBtn) clearBtn.style.display = 'inline-flex';
+
+                        const popupHtml = `
+                            <div style="font-family:'Roboto',sans-serif; min-width:180px;">
+                                <div style="font-size:0.95rem; font-weight:bold; color:var(--primary-color); display:flex; align-items:center; gap:6px;">
+                                    <i class="fas fa-map-marker-alt"></i> Dirección Buscada
+                                </div>
+                                <div style="font-size:0.85rem; margin-top:4px; color:#333;">${m.title}</div>
+                                <div style="margin-top:8px; padding-top:6px; border-top:1px solid #eee; display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                                    <a href="#" onclick="event.preventDefault(); abrirRuta(${m.lat}, ${m.lon})" style="color:#0288d1; font-weight:bold; font-size:0.8rem; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+                                        <i class="fas fa-location-arrow"></i> Cómo llegar
+                                    </a>
+                                    <button onclick="clearGlobalSearch()" style="background:none; border:none; color:#c62828; font-size:0.8rem; cursor:pointer; font-weight:bold; padding:2px 4px; display:inline-flex; align-items:center; gap:4px;">
+                                        <i class="fas fa-trash-alt"></i> Quitar
+                                    </button>
+                                </div>
+                            </div>
+                        `;
                         globalSearchMarker = L.marker([m.lat, m.lon]).addTo(map)
-                            .bindPopup(`<div style="font-size:0.95rem; font-weight:bold; color:var(--primary-color);"><i class="fas fa-map-marker-alt"></i> Dirección Buscada</div><div style="font-size:0.85rem; margin-top:4px;">${m.title}</div>`)
+                            .bindPopup(popupHtml)
                             .openPopup();
                         return;
+                    }
+
+                    inputElement.value = '';
+                    if (clearBtn) clearBtn.style.display = 'none';
+                    if (globalSearchMarker) {
+                        map.removeLayer(globalSearchMarker);
+                        globalSearchMarker = null;
                     }
 
                     if (m.layer === 'barrios' && !isBarriosVisible) toggleLayer('barrios');
@@ -3047,15 +3283,18 @@
       }, 320);
     }
 
-    // Auto-colapsar sidebar en pantallas móviles al cargar
-    if (window.innerWidth <= 768) {
-      document.addEventListener('DOMContentLoaded', () => {
-        const sidebar = document.getElementById('sidebar');
-        if (sidebar) sidebar.classList.add('collapsed');
-      });
+    // Control responsivo de apertura de sidebar según ancho de pantalla
+    function initResponsiveSidebar() {
       const sidebar = document.getElementById('sidebar');
-      if (sidebar) sidebar.classList.add('collapsed');
+      if (!sidebar) return;
+      if (window.innerWidth <= 768) {
+        sidebar.classList.add('collapsed');
+      } else {
+        sidebar.classList.remove('collapsed');
+      }
     }
+    initResponsiveSidebar();
+    window.addEventListener('resize', initResponsiveSidebar);
 
     // Observador y eventos para forzar recalculo del tamaño del mapa Leaflet
     if (typeof ResizeObserver !== 'undefined') {
