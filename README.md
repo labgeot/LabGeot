@@ -1,4 +1,4 @@
-# MapAPELL — Visor Geoespacial APELL Bahía Blanca
+﻿# MapAPELL — Visor Geoespacial APELL Bahía Blanca
 
 [![Proceso APELL](https://img.shields.io/badge/APELL-Bahía%20Blanca-2e7d32)](index.html)
 
@@ -60,7 +60,7 @@ Al actualizar una capa hay que actualizar ambos y, si se modifica un `.js`, subi
 | Respuesta primaria | `respuesta.js` | `Sistema de respuesta primaria - Digitalización.json` |
 | Delegaciones | `delegaciones.js` | `Delegaciones_municipales_partido_Bahia_Blanca.geojson` |
 | Escuelas | `escuelas.js` | `escuelas_ult.geojson` |
-| Empresas del polo | `empresas.js` | `empresas_polo.geojson` |
+| Empresas del polo | `empresas.js` | `empresas_polo_def.geojson` |
 | Mangas de viento | `mangas.js` | `MANGAS_VIENTO_APELL.geojson` |
 | Sirenas | `sirenas.js` | `SIRENA_APELL.geojson` |
 | Puntos de encuentro | `puntos_encuentro.js` | `PUNTOS_ENCUENTRO_APELL.json` |
